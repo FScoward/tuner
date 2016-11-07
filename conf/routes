@@ -6,7 +6,7 @@
 GET     /                           controllers.HomeController.index
 
 
-POST    /api/request                controllers.RequestController.sample
+POST    /api/request                controllers.AdjustmentController.newAdjustment
 
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
