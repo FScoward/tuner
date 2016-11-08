@@ -3,10 +3,8 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import application.AdjustmentService
-import controllers.model.AdjustmentView
+import controllers.model.{AnswerView, AdjustmentView}
 import infrastructure.repository.AdjustmentRepository
-import play.api.Logger
-import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 
 
@@ -20,20 +18,25 @@ class AdjustmentController @Inject()(adjustmentService: AdjustmentService, adjus
       invalid => BadRequest,
       valid => {
         val r = adjustmentService.newAdjustment(valid)
-        Logger.debug(s"=============> $r,\n ${r.determine}")
+//        val ans = r.adjustmentDateList.map(d => Answer(0L, d.id, 0L, domain.model.OK))
+//        Logger.debug(s"=============> $r,\n ${r.determine(ans)}")
         Ok
       }
     )
   }
 
   def addAnswer = Action(parse.json) { request =>
-
-    Ok
+    request.body.validate[AnswerView].fold(
+      invalid => BadRequest,
+      valid => {
+        Ok
+      }
+    )
   }
 
   def determine = Action { request =>
     val adjustment = adjustmentRepository.resolveBy(0L)
-    adjustment.determine
+    adjustment.determine(Nil)
     Ok
   }
 }

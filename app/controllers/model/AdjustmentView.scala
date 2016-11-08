@@ -16,3 +16,5 @@ object AdjustmentView {
   implicit val reads = Json.reads[AdjustmentView]
 }
 
+case class AnswerView(adjustmentDateId: Long, status: String, userName: String)
+
