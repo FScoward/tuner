@@ -9,6 +9,9 @@ import infrastructure.repository.AdjustmentRepository
 
 /**
   * Created by Fumiyasu on 2016/11/06.
+  *
+  * アプリケーションサービス層
+  * 調整役
   */
 @Singleton
 class AdjustmentService @Inject()(adjustmentRepository: AdjustmentRepository) {

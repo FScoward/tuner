@@ -3,10 +3,9 @@ import java.time.LocalDateTime
 
 import play.api.Logger
 
-trait Adjustment {
-  val id: Long
-  val title: String
-  val adjustmentDateList: Seq[AdjustmentDate]
+/** ドメインモデル */
+case class Adjustment(id: Long, title: String, adjustmentDateList: Seq[AdjustmentDate]) {
+  Logger.debug(s"================> create Adjustment Implement")
   def determine = {
     val x = for {
       a <- adjustmentDateList
@@ -16,17 +15,30 @@ trait Adjustment {
     }
     x.sortBy(_._2).head._1
   }
-}
-case class AdjustmentImp(id: Long, title: String, adjustmentDateList: Seq[AdjustmentDate]) extends Adjustment {
-  Logger.debug(s"================> create Adjustment Implement")
+
+  def addAnswer(adjustmentDateId: Long, answer: Answer): Adjustment = {
+    val result = for {
+      adjustmentDate <- adjustmentDateList
+    } yield {
+      adjustmentDate.id == adjustmentDateId match {
+        case true => adjustmentDate.addAnswer(answer)
+        case _ => adjustmentDate
+      }
+    }
+    this.copy(adjustmentDateList = result)
+  }
 }
 
-trait AdjustmentDate {
-  val id: Long
-  val schedule: Schedule
-  val answer: Seq[Answer]
+case class AdjustmentDate(id :Long, schedule: Schedule, answer: Seq[Answer]) {
+  def addAnswer(answer: Answer): AdjustmentDate = {
+    this.answer.find(_.userId == answer.userId) match {
+      case Some(_) =>
+        this
+      case None =>
+        this.copy(answer = this.answer :+ answer)
+    }
+  }
 }
-case class AdjustmentDateImp(id :Long, schedule: Schedule, answer: Seq[Answer]) extends AdjustmentDate
 
 trait Answer {
   val id: Long

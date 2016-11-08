@@ -26,6 +26,11 @@ class AdjustmentController @Inject()(adjustmentService: AdjustmentService, adjus
     )
   }
 
+  def addAnswer = Action(parse.json) { request =>
+
+    Ok
+  }
+
   def determine = Action { request =>
     val adjustment = adjustmentRepository.resolveBy(0L)
     adjustment.determine
