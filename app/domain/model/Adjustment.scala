@@ -7,7 +7,7 @@ import play.api.Logger
 case class Adjustment(id: Long, title: String, adjustmentDateList: Seq[AdjustmentDate]) {
   Logger.debug(s"create Adjustment")
   def determine(answers: Seq[Answer]) = {
-    val (id, count) = answers.filter(_.status == OK).groupBy(_.adjustmentDateId).mapValues(_.length).toSeq.sortBy(_._2).head
+    val (id, _) = answers.filter(_.status == OK).groupBy(_.adjustmentDateId).mapValues(_.length).toSeq.sortBy(_._2).head
     this.adjustmentDateList.find(_.id == id)
   }
 }
