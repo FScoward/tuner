@@ -1,6 +1,8 @@
 package domain.model
 import java.time.LocalDateTime
 
+import play.api.Logger
+
 trait Adjustment {
   val id: Long
   val title: String
@@ -15,7 +17,9 @@ trait Adjustment {
     x.sortBy(_._2).head._1
   }
 }
-case class AdjustmentImp(id: Long, title: String, adjustmentDateList: Seq[AdjustmentDate]) extends Adjustment
+case class AdjustmentImp(id: Long, title: String, adjustmentDateList: Seq[AdjustmentDate]) extends Adjustment {
+  Logger.debug(s"================> create Adjustment Implement")
+}
 
 trait AdjustmentDate {
   val id: Long
